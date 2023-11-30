@@ -26,6 +26,7 @@ import com.luck.picture.lib.config.PictureSelectionConfig;
 import com.luck.picture.lib.dialog.PictureCustomDialog;
 import com.luck.picture.lib.listener.OnPermissionDialogOptionCallback;
 import com.luck.picture.lib.permissions.PermissionChecker;
+import com.luck.picture.lib.widget.PermissExplainDialog;
 
 /**
  * @author：luck
@@ -78,10 +79,12 @@ public class PictureCustomCameraActivity extends PictureSelectorCameraEmptyActiv
             } else {
                 PermissionChecker.requestPermissions(this,
                         new String[]{Manifest.permission.CAMERA}, PictureConfig.APPLY_CAMERA_PERMISSIONS_CODE);
+                mCameraDialog.show();
             }
         } else {
             PermissionChecker.requestPermissions(this, new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE}, PictureConfig.APPLY_STORAGE_PERMISSIONS_CODE);
+            mFileDialog.show();
         }
     }
 
@@ -203,15 +206,22 @@ public class PictureCustomCameraActivity extends PictureSelectorCameraEmptyActiv
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case PictureConfig.APPLY_STORAGE_PERMISSIONS_CODE:
+                if (mFileDialog!=null){
+                    mFileDialog.dismiss();
+                }
                 // 存储权限
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     PermissionChecker.requestPermissions(this,
                             new String[]{Manifest.permission.CAMERA}, PictureConfig.APPLY_CAMERA_PERMISSIONS_CODE);
+                    mCameraDialog.show();
                 } else {
                     showPermissionsDialog(true, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, getString(R.string.picture_jurisdiction));
                 }
                 break;
             case PictureConfig.APPLY_CAMERA_PERMISSIONS_CODE:
+                if (mCameraDialog != null){
+                    mCameraDialog.dismiss();
+                }
                 // 相机权限
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (PermissionChecker.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)) {

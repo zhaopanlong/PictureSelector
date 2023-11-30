@@ -77,6 +77,7 @@ public class PictureSelectorCameraEmptyActivity extends PictureBaseActivity {
                 } else {
                     PermissionChecker.requestPermissions(this, new String[]{
                             Manifest.permission.WRITE_EXTERNAL_STORAGE}, PictureConfig.APPLY_STORAGE_PERMISSIONS_CODE);
+                    mFileDialog.show();
                 }
             }
         }
@@ -112,6 +113,7 @@ public class PictureSelectorCameraEmptyActivity extends PictureBaseActivity {
         } else {
             PermissionChecker.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA}, PictureConfig.APPLY_CAMERA_PERMISSIONS_CODE);
+            mCameraDialog.show();
         }
     }
 
@@ -398,16 +400,19 @@ public class PictureSelectorCameraEmptyActivity extends PictureBaseActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PictureConfig.APPLY_STORAGE_PERMISSIONS_CODE:
+                mFileDialog.dismiss();
                 // Store Permissions
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     PermissionChecker.requestPermissions(this,
                             new String[]{Manifest.permission.CAMERA}, PictureConfig.APPLY_CAMERA_PERMISSIONS_CODE);
+                    mCameraDialog.show();
                 } else {
                     ToastUtils.s(getContext(), getString(R.string.picture_jurisdiction));
                     exit();
                 }
                 break;
             case PictureConfig.APPLY_CAMERA_PERMISSIONS_CODE:
+                mCameraDialog.dismiss();
                 // Camera Permissions
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     onTakePhoto();

@@ -323,6 +323,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             readLocalMedia();
         } else {
             PermissionChecker.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PictureConfig.APPLY_STORAGE_PERMISSIONS_CODE);
+            mFileDialog.show();
         }
     }
 
@@ -1457,6 +1458,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             PermissionChecker
                     .requestPermissions(this,
                             new String[]{Manifest.permission.CAMERA}, PictureConfig.APPLY_CAMERA_PERMISSIONS_CODE);
+            mCameraDialog.show();
         }
     }
 
@@ -2383,6 +2385,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PictureConfig.APPLY_STORAGE_PERMISSIONS_CODE:
+                mFileDialog.dismiss();
                 // Store Permissions
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     readLocalMedia();
@@ -2392,6 +2395,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 }
                 break;
             case PictureConfig.APPLY_CAMERA_PERMISSIONS_CODE:
+                mCameraDialog.dismiss();
                 // Camera Permissions
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     onTakePhoto();

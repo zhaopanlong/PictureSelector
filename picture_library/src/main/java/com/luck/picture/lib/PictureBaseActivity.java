@@ -46,6 +46,7 @@ import com.luck.picture.lib.tools.SdkVersionUtils;
 import com.luck.picture.lib.tools.ToastUtils;
 import com.luck.picture.lib.tools.VoiceUtils;
 
+import com.luck.picture.lib.widget.PermissExplainDialog;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -67,6 +68,8 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
     protected List<LocalMedia> selectionMedias = new ArrayList<>();
     protected Handler mHandler = new Handler(Looper.getMainLooper());
     protected View container;
+    public PermissExplainDialog mFileDialog;
+    public PermissExplainDialog mCameraDialog;
     /**
      * if there more
      */
@@ -150,6 +153,8 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mFileDialog = new PermissExplainDialog(this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        mCameraDialog = new PermissExplainDialog(this,Manifest.permission.CAMERA);
         config = PictureSelectionConfig.getInstance();
         if (config.language != PictureConfig.UNKNOWN_LANGUAGE) {
             PictureLanguageUtils.setAppLanguage(getContext(), config.language);
@@ -182,6 +187,7 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
         initWidgets();
         initPictureSelectorStyle();
         isOnSaveInstanceState = false;
+
     }
 
     /**
